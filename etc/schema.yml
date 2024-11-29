@@ -1,6 +1,6 @@
 swagger: '2.0'
 info:
-  version: "0.1.1"
+  version: "0.1.0"
   title: Worker Process API
   description: API for worker processes to connect and send/receive JSON encoded objects.
   termsOfService: http://example.com/terms/
@@ -230,72 +230,3 @@ definitions:
         format: int32
       message:
         type: string
-        /get_all:
-          get:
-            summary: Get all documents
-            description: Retrieve a list of all documents with pagination.
-            operationId: getAllDocuments
-            tags:
-              - Documents
-            parameters:
-              - name: page
-                in: query
-                required: false
-                type: integer
-                description: Page number for pagination
-              - name: pagesize
-                in: query
-                required: false
-                type: integer
-                description: Number of documents per page
-                default: 20
-            responses:
-              '200':
-                description: List of documents
-                schema:
-                  type: array
-                  items:
-                    $ref: '#/definitions/Document'
-              '500':
-                description: Internal server error
-      definitions:
-        Document:
-          type: object
-          properties:
-            id:
-              type: string
-              description: Unique identifier for the document
-            content:
-              type: string
-              description: Content of the document
-            created_at:
-              type: string
-              format: date-time
-              description: Document creation timestamp
-          get:
-            summary: Get all worker processes
-            description: Retrieve a list of all worker processes with pagination.
-            operationId: getAllWorkers
-            tags:
-              - Worker
-            parameters:
-              - name: page
-                in: query
-                required: false
-                type: integer
-                description: Page number for pagination
-              - name: pagesize
-                in: query
-                required: false
-                type: integer
-                description: Number of workers per page
-                default: 20
-            responses:
-              '200':
-                description: List of worker processes
-                schema:
-                  type: array
-                  items:
-                    $ref: '#/definitions/Worker'
-              '500':
-                description: Internal server error
