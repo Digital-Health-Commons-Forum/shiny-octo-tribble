@@ -4,14 +4,16 @@ use v5.30;
 use warnings;
 use strict;
 
-use YAML::XS 'LoadFile';
+use lib qw(lib/);
 
+use YAML::XS 'LoadFile';
 use Mojo::JSON qw(decode_json);
 use Mojo::File 'path';
 use Mojo::Util;
-
 use Mojolicious::Lite -signatures;
 use Mojolicious::Plugin::OpenAPI;
+use DBIx::Class::Candy;
+use Mojo::Core::Schema;
 
 # Load the OpenAPI specification
 plugin OpenAPI => {url => 'schema.yml'};
@@ -31,25 +33,39 @@ get '/' => sub ($c) {
         { method => 'POST', path => '/auth/login', description => 'User login' },
         { method => 'POST', path => '/auth/logout', description => 'User logout' },
         { method => 'GET', path => '/user/:id', description => 'Get user profile by ID' },
+        { method => 'POST', path => '/media/find', description => 'Find document by keywords' },
+        { method => 'GET', path => '/media/tags', description => 'Get tags by document ID' },
+        { method => 'POST', path => '/media/filename', description => 'Get filename by document ID' },
     ];
     $c->render(json => {endpoints => $routes});
 };
 
-any '/worker' => sub ($c) {
-    $c->render(openapi => {id => 1, name => 'Worker 1', status => 'active'});
-}, 'createWorker';
+# Database setup
+helper db => sub {
+    state $schema = Mojo::Core::Schema->connect('dbi:SQLite:dbname=core.db');
+};
 
+# Define routes
 get '/worker/:id' => sub ($c) {
     my $id = $c->param('id');
-    $c->render(openapi => {id => $id, name => 'Worker 1', status => 'active'});
+    my $worker = $c->db->resultset('Worker')->find($id);
+    return $c->render(openapi => {error => 'Worker not found'}, status => 404) unless $worker;
+    $c->render(openapi => {id => $worker->id, name => $worker->name, status => $worker->status});
 }, 'getWorkerById';
 
 put '/worker/:id' => sub ($c) {
     my $id = $c->param('id');
-    $c->render(openapi => {id => $id, name => 'Updated Worker', status => 'active'});
+    my $worker = $c->db->resultset('Worker')->find($id);
+    return $c->render(openapi => {error => 'Worker not found'}, status => 404) unless $worker;
+    $worker->update({name => 'Updated Worker', status => 'active'});
+    $c->render(openapi => {id => $worker->id, name => $worker->name, status => $worker->status});
 }, 'updateWorker';
 
 del '/worker/:id' => sub ($c) {
+    my $id = $c->param('id');
+    my $worker = $c->db->resultset('Worker')->find($id);
+    return $c->render(openapi => {error => 'Worker not found'}, status => 404) unless $worker;
+    $worker->delete;
     $c->render(openapi => undef, status => 204);
 }, 'deleteWorker';
 
@@ -65,6 +81,27 @@ get '/user/:id' => sub ($c) {
     my $id = $c->param('id');
     $c->render(openapi => {id => $id, name => 'User Name', email => 'user@example.com', created_at => '2023-10-01T00:00:00Z'});
 }, 'getUserById';
+
+post '/media/find' => sub ($c) {
+    my $keywords = $c->req->json->{keywords};
+    # Simulate finding a document ID based on keywords
+    my $docid = 'doc123';
+    $c->render(openapi => {docid => $docid});
+}, 'findDocument';
+
+get '/media/tags' => sub ($c) {
+    my $docid = $c->param('docid');
+    # Simulate retrieving tags for a document ID
+    my $tags = ['tag1', 'tag2', 'tag3'];
+    $c->render(openapi => {tags => $tags});
+}, 'getTags';
+
+post '/media/filename' => sub ($c) {
+    my $docid = $c->req->json->{docid};
+    # Simulate retrieving filename for a document ID
+    my $filename = 'document.pdf';
+    $c->render(openapi => {filename => $filename});
+}, 'getFilename';
 
 # Start the Mojolicious app
 app->start;
@@ -96,6 +133,9 @@ sub self_test_schema {
         loginUser
         logoutUser
         getUserById
+        findDocument
+        getTags
+        getFilename
     );
 
     # Validate that all schema operations have corresponding handlers
