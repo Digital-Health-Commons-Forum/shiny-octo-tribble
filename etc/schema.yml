@@ -1,6 +1,6 @@
 swagger: '2.0'
 info:
-  version: "0.1.0"
+  version: "0.1.1"
   title: Worker Process API
   description: API for worker processes to connect and send/receive JSON encoded objects.
   termsOfService: http://example.com/terms/
@@ -8,8 +8,8 @@ info:
     name: API Support
     email: support@example.com
   license:
-    name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
+    name: AGPL 3.0
+    url: https://www.gnu.org/licenses/agpl-3.0.html
 host: api.example.com
 basePath: /v1
 schemes:
