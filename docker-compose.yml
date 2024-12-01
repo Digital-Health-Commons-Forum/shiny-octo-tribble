@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+    minio:
+        image: minio/minio
+        container_name: minio
+        environment:
+            MINIO_ROOT_USER: minioadmin
+            MINIO_ROOT_PASSWORD: minioadmin
+        command: server /data
+        ports:
+            - "9000:9000"
+            - "9001:9001"
+        volumes:
+            - minio-data:/data
+
+    mojo:
+        image: perl:latest
+        container_name: mojo
+        volumes:
+            - ./mojo-app:/usr/src/app
+        working_dir: /usr/src/app
+        command: ["morbo", "script/my_app"]
+        depends_on:
+            - minio
+
+volumes:
+    minio-data:
