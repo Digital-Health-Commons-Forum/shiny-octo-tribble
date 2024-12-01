@@ -1,6 +1,6 @@
 swagger: '2.0'
 info:
-  version: "0.1.1"
+  version: "0.1.2"
   title: Worker Process API
   description: API for worker processes to connect and send/receive JSON encoded objects.
   termsOfService: http://example.com/terms/
@@ -147,6 +147,103 @@ paths:
           description: Unauthorized
         '500':
           description: Internal server error
+
+  /media/find:
+    post:
+      summary: Find document by keywords
+      description: Returns a document ID based on provided keywords.
+      operationId: findDocument
+      tags:
+        - Media
+      parameters:
+        - in: body
+          name: keywords
+          description: Keywords to search for the document
+          required: true
+          schema:
+            type: object
+            properties:
+              keywords:
+                type: array
+                items:
+                  type: string
+      responses:
+        '200':
+          description: Document ID found
+          schema:
+            type: object
+            properties:
+              docid:
+                type: string
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal server error
+  /media/tags:
+    post:
+      summary: Get tags by document ID
+      description: Returns tags associated with a specific document ID.
+      operationId: getTags
+      tags:
+        - Media
+      parameters:
+        - in: body
+          name: docid
+          description: Document ID to get tags for
+          required: true
+          schema:
+            type: object
+            properties:
+              docid:
+                type: string
+      responses:
+        '200':
+          description: Tags retrieved successfully
+          schema:
+            type: object
+            properties:
+              tags:
+                type: array
+                items:
+                  type: string
+        '400':
+          description: Invalid input
+        '404':
+          description: Document not found
+        '500':
+          description: Internal server error
+  /media/filename:
+    post:
+      summary: Get filename by document ID
+      description: Returns the filename associated with a specific document ID.
+      operationId: getFilename
+      tags:
+        - Media
+      parameters:
+        - in: body
+          name: docid
+          description: Document ID to get filename for
+          required: true
+          schema:
+            type: object
+            properties:
+              docid:
+                type: string
+      responses:
+        '200':
+          description: Filename retrieved successfully
+          schema:
+            type: object
+            properties:
+              filename:
+                type: string
+        '400':
+          description: Invalid input
+        '404':
+          description: Document not found
+        '500':
+          description: Internal server error
+
   /user/{id}:
     get:
       summary: Get user profile by ID
