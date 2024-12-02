@@ -1,6 +1,10 @@
 package Mojo::Core::Schema::Result::Type;
 use DBIx::Class::Candy -autotable => v1;
 
+use warnings;
+use strict;
+our $VERSION = '0.025';
+
 primary_column id => {
     data_type => 'integer',
     is_auto_increment => 1,

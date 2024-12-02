@@ -1,0 +1,18 @@
+FROM perl:5.40.0-slim
+
+# Set working directory
+WORKDIR /app
+
+# Copy required application deps
+COPY vendor /app/vendor
+COPY cpanfile /app
+
+# Add the required YANL module from YAML::XS to YAML
+RUN apt update -y \
+    && apt install -y build-essential sqlite3 libexpat1-dev
+
+# Add all the deps to the system
+RUN cpanm --from "$PWD/vendor/cache" --installdeps --notest --quiet .
+
+# Add a perl user to run the application
+RUN useradd -m -d /perl perl
