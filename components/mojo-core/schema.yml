@@ -1,1 +1,58 @@
-../../etc/schema.yml
+
+      - status
+    properties:
+      id:
+        type: string
+        description: Unique identifier for the worker process
+      name:
+        type: string
+        description: Name of the worker process
+      status:
+        type: string
+        description: Current status of the worker process
+        enum:
+          - active
+          - inactive
+          - paused
+  LoginCredentials:
+    type: object
+    required:
+      - username
+      - password
+    properties:
+      username:
+        type: string
+        description: Username for logging in
+      password:
+        type: string
+        description: Password for logging in
+  Session:
+    type: object
+    properties:
+      token:
+        type: string
+        description: Session token
+  UserProfile:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      email:
+        type: string
+      created_at:
+        type: string
+        format: date-time
+  Error:
+    type: object
+    required:
+      - code
+      - message
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+        

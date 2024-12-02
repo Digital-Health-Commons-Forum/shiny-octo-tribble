@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.3'
 
 services:
     minio:
@@ -15,14 +15,16 @@ services:
             - minio-data:/data
 
     mojo:
-        image: perl:latest
+        image: mojocore:release
         container_name: mojo
         volumes:
             - ./mojo-app:/usr/src/app
-        working_dir: /usr/src/app
-        command: ["morbo", "script/my_app"]
+        working_dir: /perl
+        command: ["perl", "main.pl","daemon"]
         depends_on:
             - minio
+        ports:
+            - "3000:3000"
 
 volumes:
     minio-data:
