@@ -4,7 +4,7 @@ package Mojo::Core::Schema;
 
 use warnings;
 use strict;
-our $VERSION = '0.020';
+our $VERSION = '0.021';
 
 use base 'DBIx::Class::Schema';
 __PACKAGE__->load_namespaces;

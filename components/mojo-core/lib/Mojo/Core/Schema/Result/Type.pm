@@ -3,7 +3,7 @@ use DBIx::Class::Candy -autotable => v1;
 
 use warnings;
 use strict;
-our $VERSION = '0.020';
+our $VERSION = '0.021';
 
 primary_column id => {
     data_type => 'integer',
