@@ -36,3 +36,6 @@ inc/
 
 # VScode
 .vstags
+
+# Perl local library directory (carton)
+components/mojo-core/local/
