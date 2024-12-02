@@ -39,3 +39,5 @@ inc/
 
 # Perl local library directory (carton)
 components/mojo-core/local/
+# Perl dzil build directory
+components/mojo-core/.build/
