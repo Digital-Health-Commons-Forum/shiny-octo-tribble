@@ -41,3 +41,5 @@ inc/
 components/mojo-core/local/
 # Perl dzil build directory
 components/mojo-core/.build/
+# Perl dzil release files
+components/mojo-core/Mojo-Core-*.*
