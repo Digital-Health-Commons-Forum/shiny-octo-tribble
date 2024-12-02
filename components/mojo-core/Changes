@@ -2,6 +2,9 @@ Revision history for Perl extension [Your-Module-Name]
 
 {{$NEXT}}
 
+0.020     2024-12-02 21:16:51 GMT
+    Configuring dzil to work correctly..
+
 0.019     2024-12-02 21:15:13 GMT
     Configuring dzil to work correctly..
 
