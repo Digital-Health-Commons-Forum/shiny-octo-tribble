@@ -1,0 +1,7 @@
+requires 'YAML::XS';
+requires 'Mojo::JSON';
+requires 'Mojo::File';
+requires 'Mojo::Util';
+requires 'Mojolicious::Lite';
+requires 'Mojolicious::Plugin::OpenAPI';
+requires 'DBIx::Class::Candy';
