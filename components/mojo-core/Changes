@@ -1,30 +1,7 @@
 Revision history for Perl extension [Your-Module-Name]
 
 {{$NEXT}}
-
-0.021     2024-12-02 21:18:06 GMT
-    Configuring dzil to work correctly..
-
-0.020     2024-12-02 21:16:51 GMT
-    Configuring dzil to work correctly..
-
-0.019     2024-12-02 21:15:13 GMT
-    Configuring dzil to work correctly..
-
-0.018     2024-12-02 21:13:55 GMT
-    Configuring dzil to work correctly..
-
-0.017     2024-12-02 21:12:38 GMT
-    Configuring dzil to work correctly..
-
-0.016     2024-12-02 21:11:47 GMT
-    Configuring dzil to work correctly..
-
-0.015     2024-12-02 21:08:22 GMT (TRIAL RELEASE)
-    Configuring dzil to work correctly..
-
-0.014     2024-12-02 21:04:59 GMT
-    Configuring dzil to work correctly..
-
-0.013     2024-12-02 20:57:39 GMT
-    Incorperated DZIL build system for the primary module
+    * Added DZIL build process, need to figure out better tag naming!
+    * Updated cpanfile with some missing deps
+    * Completly changed Docker build process to be faster
+    * Application now runs correctly within docker

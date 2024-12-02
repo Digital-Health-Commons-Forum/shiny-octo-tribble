@@ -5,3 +5,6 @@ requires 'Mojo::Util';
 requires 'Mojolicious::Lite';
 requires 'Mojolicious::Plugin::OpenAPI';
 requires 'DBIx::Class::Candy';
+requires 'Params::Util';
+requires 'Sub::Name';
+requires 'Module::Build::Tiny';

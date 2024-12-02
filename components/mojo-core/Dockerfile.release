@@ -1,0 +1,25 @@
+FROM mojocore:tweaks
+
+# Make a working directory
+RUN mkdir /install
+
+# Copy the Mojo-Core-* files
+COPY Mojo-Core-* /install/
+
+# Set the working directory
+WORKDIR /install
+
+# Install the application (latest version)
+RUN cpanm $(ls Mojo-Core-*.tar.gz | sort -V | tail -n 1)
+
+# Switch to the perl user
+USER perl
+
+# Set the working directory
+WORKDIR /perl
+
+# Copy the application files
+COPY ./main.pl /perl/main.pl
+
+# Run the application
+CMD ["perl", "main.pl", "daemon"]
