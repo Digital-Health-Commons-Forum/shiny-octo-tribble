@@ -2,10 +2,13 @@ Revision history for Perl extension [Your-Module-Name]
 
 {{$NEXT}}
 
+0.016     2024-12-02 21:11:47 GMT
+    Configuring dzil to work correctly..
 0.015     2024-12-02 21:08:22 GMT (TRIAL RELEASE)
     Configuring dzil to work correctly..
 
 0.014     2024-12-02 21:04:59 GMT
     Configuring dzil to work correctly..
+
 0.013     2024-12-02 20:57:39 GMT
     Incorperated DZIL build system for the primary module
