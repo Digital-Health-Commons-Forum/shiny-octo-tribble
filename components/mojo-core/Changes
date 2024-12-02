@@ -1,6 +1,8 @@
 Revision history for Perl extension [Your-Module-Name]
 
 {{$NEXT}}
+
+0.022     2024-12-02 23:40:22 GMT
     * Added DZIL build process, need to figure out better tag naming!
     * Updated cpanfile with some missing deps
     * Completly changed Docker build process to be faster
