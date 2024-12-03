@@ -44,4 +44,6 @@ components/mojo-core/dev/local
 components/mojo-core/.build/
 # Perl dzil release files
 components/mojo-core/Mojo-Core-*.*
-
+# Ignore the docker-compose.override.yml file, an example of this is within
+# components/mojo-core/dev/
+docker-compose.override.yml
