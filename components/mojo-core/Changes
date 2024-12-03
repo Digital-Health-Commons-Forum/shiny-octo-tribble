@@ -1,7 +1,9 @@
 Revision history for Perl extension [Your-Module-Name]
 
 {{$NEXT}}
-
+    * Further improved docker build process
+    * Starting to add in Minio/S3 modules
+    * Added version to dist.ini
 0.022     2024-12-02 23:40:22 GMT
     * Added DZIL build process, need to figure out better tag naming!
     * Updated cpanfile with some missing deps
