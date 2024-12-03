@@ -3,9 +3,9 @@ FROM perl:5.40.0-slim
 # Set working directory
 WORKDIR /app
 
-# Copy application files
-# TODO: Add only what is required.
-COPY . /app
+# Copy required application deps
+COPY vendor /app/vendor
+COPY cpanfile /app
 
 # Add the required YANL module from YAML::XS to YAML
 RUN apt update -y \

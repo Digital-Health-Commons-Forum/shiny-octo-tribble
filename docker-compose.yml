@@ -23,6 +23,8 @@ services:
         command: ["perl", "main.pl","daemon"]
         depends_on:
             - minio
+        ports:
+            - "3000:3000"
 
 volumes:
     minio-data:
