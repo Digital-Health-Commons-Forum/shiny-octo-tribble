@@ -16,9 +16,35 @@ use Mojolicious::Lite -signatures;
 use Mojolicious::Plugin::OpenAPI;
 use DBIx::Class::Candy;
 use Mojo::Core::Schema;
+use Amazon::S3;
+
+# Wait to make sure all other components are up
+# swap this for aep later
+say "Waiting for other components to start...";
+sleep 5;
 
 # Load the OpenAPI specification
 plugin OpenAPI => {url => 'data:///schema.yml'};
+
+# Create a connector to S3/Minio
+my $minio_access_key_id     = "minioadmin";
+my $minio_secret_access_key = "minioadmin";
+my $s3 = Amazon::S3->new(
+    {   
+      aws_access_key_id     => $minio_access_key_id,
+      aws_secret_access_key => $minio_secret_access_key,
+      retry                 => 1,
+      host                  => 'http://minio:9000',
+    }
+);
+my $response = $s3->buckets;
+# create a bucket
+my $bucket_name = $minio_access_key_id . '-net-amazon-s3-test';
+my $bucket = $s3->add_bucket( { bucket => $bucket_name } )
+    or die $s3->err . ": " . $s3->errstr;
+# delete bucket
+$bucket->delete_bucket;
+
 
 # Validate the schema against the handlers
 # self_test_schema() - fix me, cannot find the schema in docker with an explicit path???
