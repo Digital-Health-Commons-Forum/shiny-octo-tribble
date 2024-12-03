@@ -25,6 +25,18 @@ services:
             - minio
         ports:
             - "3000:3000"
+    vue-app:
+        container_name: vue-app
+        build:
+        context: ./front-end
+        dockerfile: Dockerfile
+        ports:
+        - "5173:5173"
+        volumes:
+        - ./front-end:/app
+        stdin_open: true
+        tty: true
+
 
 volumes:
     minio-data:
