@@ -2,6 +2,10 @@ Revision history for Perl extension [Your-Module-Name]
 
 {{$NEXT}}
 
+0.024     2024-12-03 01:39:13 GMT
+    * Added Amazon::S3 to the package list for minio connectivity
+    * Added a docker-compose.override.yml to ease dev,
+    * Succesfully written and read from Minio in perl
 0.023     2024-12-03 00:35:08 GMT
     * Further improved docker build process
     * Starting to add in Minio/S3 modules
