@@ -33,3 +33,17 @@ inc/
 /MANIFEST.bak
 /pm_to_blib
 /*.zip
+
+# VScode
+.vstags
+
+# Perl local library directory (carton)
+components/mojo-core/local/
+components/mojo-core/dev/local
+# Perl dzil build directory
+components/mojo-core/.build/
+# Perl dzil release files
+components/mojo-core/Mojo-Core-*.*
+# Ignore the docker-compose.override.yml file, an example of this is within
+# components/mojo-core/dev/
+docker-compose.override.yml
