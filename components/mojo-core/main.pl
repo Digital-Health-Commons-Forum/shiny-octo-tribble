@@ -74,23 +74,31 @@ helper db => sub {
 
 # Development dictionary
 my $dev_fake_minio = {
-    'filenames' =>  {
+    'filename_by_name' =>  {
         'file1'     =>  1,
         'file2'     =>  2,
         'file3'     =>  3,
         'fancyfile' =>  4,
     },
+    'filename_by_id' => [
+        undef,
+        'file1',
+        'file2',
+        'file3',
+        'fancyfile',
+    ],
     'tags'  =>  [
-        ['file1',[1]],
-        ['file2',[2]],
-        ['file3',[3]],
+        ['file1',[1]], # Docid = 1, filename_by_name[1]
+        ['file2',[2]], # Docid = 2, filename_by_name[2]
+        ['file3',[3]], # Docid = 3, filename_by_name[3]
         ['medical',[1]],
         ['alchemy',[2,4]],
-        ['uber',[2]]
+        ['uber',[2]] # Docid = 2, filename_by_name[2]
     ],
     'details' => [
         { 
             'filename' => 'medical blood thingy.pdf',
+            # Create tags from minio lookup
             'tags' => ['file1','medical','alchemy']
         },
         { 
@@ -183,17 +191,17 @@ post '/media/find' => sub ($c) {
     my @results;
     my @keywords = @{$c->req->json->{'keywords'}||[]};
     foreach my $keyword (@keywords) {
-        # say STDERR "Looking for: $keyword";
+        say STDERR "Looking for: $keyword";
         my $loop_count = 0;
         foreach my $local_keyword (@{$dev_fake_minio->{'tags'}}) {
             my $local_tag = $local_keyword->[0];
-            # say STDERR "Trying: '$local_tag' to '$keyword' (test)";
+            say STDERR "Trying: '$local_tag' to '$keyword' (test)";
             if ($local_tag =~ m#\Q$keyword\E#) {
-                # say STDERR "Find: $keyword to $local_tag (match)";
+                say STDERR "Find: $keyword to $local_tag (match)";
                 my @matched_docs = @{$dev_fake_minio->{'tags'}->[$loop_count]->[1]};
-                # say STDERR "Would match: ".join(',',@matched_docs);
+                say STDERR "Would match: ".join(',',@matched_docs);
                 foreach my $matched_id (@matched_docs) {
-                    $results[$matched_id] = $matched_id;
+                    $results[$matched_id]++;
                 }
                 say STDERR "Results: ".Dumper(\@results);
             }
@@ -212,11 +220,29 @@ get '/media/tags' => sub ($c) {
     $c->render(json => {tags => $tags});
 }, 'getTags';
 
-post '/media/filename' => sub ($c) {
-    my $docid = $c->req->json->{docid};
-    # Simulate retrieving filename for a document ID
-    my $filename = 'document.pdf';
-    $c->render(openapi => {filename => $filename});
+get '/media/filename' => sub ($c) {
+    my $docid = $c->param('docid');
+
+    if ($docid !~ m#^\d+$#) {
+        return $c->render(
+            openapi => {
+                error => 'Invalid docid'
+            },
+            status => 400
+        );
+    }
+    elsif (!$dev_fake_minio->{'filename_by_id'}->[$docid]) {
+        return $c->render(
+            openapi => {
+                error => 'Could not find document',
+                status => 404 
+            },  
+        );
+    }
+    else {
+        my $filename = $dev_fake_minio->{'filename_by_id'}->[$docid];
+        $c->render(json => {filename => $filename});
+    }
 }, 'getFilename';
 
 app->start;
