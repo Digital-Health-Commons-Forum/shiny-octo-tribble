@@ -28,8 +28,8 @@ services:
     vue-app:
         container_name: vue-app
         build:
-        context: ./components/front-end
-        dockerfile: Dockerfile
+            context: ./components/front-end
+            dockerfile: Dockerfile
         ports:
         - "5173:5173"
         volumes:
