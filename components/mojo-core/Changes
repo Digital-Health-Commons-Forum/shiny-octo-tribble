@@ -2,6 +2,10 @@ Revision history for Perl extension [Your-Module-Name]
 
 {{$NEXT}}
 
+0.025     2024-12-05 00:16:33 GMT
+    * Updated API heavily
+    * Default connects to minio
+    * Documentation updates!
 0.024     2024-12-03 01:39:13 GMT
     * Added Amazon::S3 to the package list for minio connectivity
     * Added a docker-compose.override.yml to ease dev,
