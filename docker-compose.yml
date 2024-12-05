@@ -24,7 +24,7 @@ services:
         depends_on:
             - minio
         ports:
-            - "3000:3000"
+            - "8080:3000"
     vue-app:
         container_name: vue-app
         build:

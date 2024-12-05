@@ -8,7 +8,7 @@ RUN apt-get clean \
     && rm -rf /app
 
 # Flatten the image
-FROM scratch AS flat
+FROM scratch AS flatten
 
 COPY --from=mojocore:base / /
 

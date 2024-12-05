@@ -9,7 +9,13 @@ COPY cpanfile /app
 
 # Add the required YANL module from YAML::XS to YAML
 RUN apt update -y \
-    && apt install -y build-essential sqlite3 libexpat1-dev
+    && apt install -y \
+        build-essential \
+        sqlite3 \
+        libexpat1-dev \
+        libxml2 \
+        libxml2-dev \
+        libxml-simple-perl
 
 # Add all the deps to the system
 RUN cpanm --from "$PWD/vendor/cache" --installdeps --notest --quiet .
