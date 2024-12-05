@@ -3,6 +3,7 @@
   import { useRouter } from 'vue-router';
 
   const search = ref('');
+  const router = useRouter();
   const headers = [
     {
       title: 'Name',
@@ -80,31 +81,33 @@
   ];
 
   const handleClick = (event, row) => {
-    console.log(row.item.filename)
-    // useRouter().push(`/file/${row.item.filename}`)
+    console.log(row.item.doc_id)
+    router.push(`/document/${row.item.doc_id}`)
   }
 </script>
 
 <template>
-  <v-card>
-    <v-card-title>
-      All Documents
-    </v-card-title>
-    <v-text-field
-      label="Search for names or tags"
-      class="ms-3"
-      v-model="search"
-    ></v-text-field>
-    <v-data-table
-      class="ms-3"
-      :headers="headers"
-      :hover="true"
-      :items="fakeData"
-      :items-length="fakeData.length"
-      :hide-default-footer="true"
-      :search="search"
-      @click:row="handleClick"
-    >
-    </v-data-table>
-  </v-card>
+  <v-container>
+    <v-card>
+      <v-card-title>
+        All Documents
+      </v-card-title>
+      <v-text-field
+        label="Search for names or tags"
+        class="mx-3"
+        v-model="search"
+      ></v-text-field>
+      <v-data-table
+        class="px-3"
+        :headers="headers"
+        :hover="true"
+        :items="fakeData"
+        :items-length="fakeData.length"
+        :hide-default-footer="true"
+        :search="search"
+        @click:row="handleClick"
+      >
+      </v-data-table>
+    </v-card>
+  </v-container>
 </template>
