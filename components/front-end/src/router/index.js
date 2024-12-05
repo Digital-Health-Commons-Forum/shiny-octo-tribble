@@ -9,6 +9,11 @@ const router = createRouter({
       name: 'home',
       component: HomeView,
     },
+    // {
+    //   path: '/file/:filename',
+    //   name: 'file',
+    //   component: HomeView
+    // }
   ],
 })
 
