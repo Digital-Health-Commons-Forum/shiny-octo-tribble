@@ -6,6 +6,6 @@
 <template>
   <v-app id="dhcf">
     <NavBar/>
-      <RouterView style="margin-top: 150px; margin-left: 64px; margin-right: 64px;"/>
+    <RouterView style="margin-top: 150px; margin-left: 64px; margin-right: 64px;"/>
   </v-app>
 </template>
