@@ -1,7 +1,10 @@
 Revision history for Perl extension [Your-Module-Name]
 
 {{$NEXT}}
-
+    * Changed the version in main.pl to the same style as the module versions
+    to see if it will still get version bumped
+    * Added Const::Fast into the cpanfile and codebase in replacement of Readonly
+    * Added Carp & Carp::Always
 0.025     2024-12-05 00:16:33 GMT
     * Updated API heavily
     * Default connects to minio

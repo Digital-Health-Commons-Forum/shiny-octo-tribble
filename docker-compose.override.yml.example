@@ -1,0 +1,34 @@
+version: '3.3'
+
+services:
+    minio:
+        image: minio/minio
+        container_name: minio
+        environment:
+            MINIO_ROOT_USER: admin!%&
+            MINIO_ROOT_PASSWORD: admin!%&
+        command: server /data --console-address ":9001"
+        ports:
+            - "9000:9000"
+            - "9001:9001"
+        volumes:
+            - minio-data:/data
+
+    mojo:
+        image: mojocore:release
+        container_name: mojo
+        environment:
+            MINIO_ROOT_USER: 9fQuwMfXKMDwh9xd2YN6
+            MINIO_ROOT_PASSWORD: SGPKltl5v4FgshdB6zem8EZNyfaw3IgvdH35L5Cm
+            MINIO_URI: http://minio:9000
+        volumes:
+            - ./components/mojo-core:/perl
+        working_dir: /perl
+        command: ["perl", "main.pl","daemon"]
+        depends_on:
+            - minio
+        ports:
+            - "3000:3000"
+
+volumes:
+    minio-data:
