@@ -36,6 +36,7 @@ inc/
 
 # VScode
 .vstags
+.vscode
 
 # Perl local library directory (carton)
 components/mojo-core/local/
@@ -47,3 +48,4 @@ components/mojo-core/Mojo-Core-*.*
 # Ignore the docker-compose.override.yml file, an example of this is within
 # components/mojo-core/dev/
 docker-compose.override.yml
+

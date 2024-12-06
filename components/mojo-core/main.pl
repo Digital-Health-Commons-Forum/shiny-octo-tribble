@@ -1,4 +1,6 @@
-our $VERSION = 'v0.1_3';
+#!/usr/bin/env perl
+
+our $VERSION = '0.026';
 
 use v5.30;
 use warnings;
