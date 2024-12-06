@@ -2,26 +2,37 @@
 
 our $VERSION = '0.026';
 
+# Lang
 use v5.30;
 use warnings;
 use strict;
-
-use lib qw(lib/);
-use Env;
-use Data::Dumper;
-use Readonly;
 use diagnostics;
+use lib qw(lib/);
 
+# Core 
+use Env;
+use Carp qw(cluck shortmess longmess croak confess);
+use Carp::Always;
+
+# 3rd Party
+use Const::Fast;
+use DBIx::Class::Candy;
 use YAML::XS 'LoadFile';
 use Mojo::JSON qw(decode_json);
 use Mojo::File 'path';
 use Mojo::Util;
 use Mojolicious::Lite -signatures;
 use Mojolicious::Plugin::OpenAPI;
-use DBIx::Class::Candy;
-use Mojo::Core::Schema;
 use Net::Amazon::S3;
 use URI;
+
+# Local
+use Mojo::Core::Schema;
+
+# Debugging
+use Data::Dumper::Concise;
+diagnostics->disable;
+
 
 # Database setup
 helper db => sub {
@@ -29,26 +40,33 @@ helper db => sub {
 };
 
 # Load the OpenAPI specification
-plugin OpenAPI => {url => 'data:///schema.js'};
-diagnostics->disable;
+plugin OpenAPI => {url => 'file://schema.js'};
 app->secrets(['A1B2c3d$']);
 
 # Collect/create all the minio information
-Readonly::Scalar my $minio_credentials => do {
-    my $minio_access_key_id     = $ENV{'MINIO_ROOT_USER'}||'minioadmin';
-    my $minio_secret_access_key = $ENV{'MINIO_ROOT_PASSWORD'}||'minioadmin';
+const my $minio_credentials => do {
+    my $minio_access_key        = $ENV{'MINIO_ACCESS_KEY'};
+    my $minio_secret_key        = $ENV{'MINIO_SECRET_KEY'};
     my $minio_uri               = $ENV{'MINIO_URI'}||'http://127.0.0.1:9000';
 
     my $minio_uri_obj           = URI->new($minio_uri);
-    my $minio_uri_host          = $minio_uri_obj->host;
+    my $minio_uri_host          = $minio_uri_obj->host || '127.0.0.1';
     my $minio_uri_port          = $minio_uri_obj->port || 9000;
-    my $minio_uri_scheme        = $minio_uri_obj->scheme;
+    my $minio_uri_scheme        = $minio_uri_obj->scheme =~ m#^http|https$#i ? lc($minio_uri_obj->scheme) : 'http';
     my $minio_uri_secure        = $minio_uri_scheme =~ m#^https#i ? 1 : 0;
+
     my $minio_uri_hostport      = join(':',$minio_uri_host,$minio_uri_port);
+    my ($uri_user,$uri_pass)    = split(':',$minio_uri_obj->userinfo||'');
+    $minio_access_key           ||= $uri_user ? $uri_user : '';
+    $minio_secret_key           ||= $uri_pass ? $uri_pass : '';
+
+    if (!$minio_access_key || !$minio_secret_key) {
+        croak('Missing Minio credentials');
+    }
 
     {
-        'minio_key_id'          =>  $minio_access_key_id,
-        'minio_access_key'      =>  $minio_secret_access_key,
+        'minio_key_id'          =>  $minio_access_key,
+        'minio_access_key'      =>  $minio_secret_key,
         'minio_host'            =>  $minio_uri_host,
         'minio_port'            =>  $minio_uri_port,
         'minio_scheme'          =>  $minio_uri_scheme,

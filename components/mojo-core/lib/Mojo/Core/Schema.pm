@@ -4,6 +4,10 @@ package Mojo::Core::Schema;
 
 use warnings;
 use strict;
+use v5.30;
+
+use Carp::Always;
+
 our $VERSION = '0.026';
 
 use base 'DBIx::Class::Schema';
