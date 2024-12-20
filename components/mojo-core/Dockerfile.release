@@ -21,5 +21,8 @@ WORKDIR /perl
 # Copy the application files
 COPY ./main.pl /perl/main.pl
 
+# Add in the schema
+COPY schema.js /perl/schema.js
+
 # Run the application
 CMD ["perl", "main.pl", "daemon"]
