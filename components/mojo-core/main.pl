@@ -162,7 +162,7 @@ get '/' => sub ($c) {
 };
 
 # Test
-post "/echo" => sub {
+post '/echo' => sub {
   # Validate input request or return an error document
   my $c = shift->openapi->valid_input or return;
   # Generate some data
@@ -170,7 +170,7 @@ post "/echo" => sub {
   # Validate the output response and render it to the user agent
   # using a custom "openapi" handler.
   $c->render(openapi => $data);
-}, "echo";
+}, 'echo';
 
 # Define routes
 post '/workers' => sub ($c) {
