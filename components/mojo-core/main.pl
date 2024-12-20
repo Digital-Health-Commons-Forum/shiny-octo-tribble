@@ -12,14 +12,15 @@ our $VERSION = '0.026';
 
 # Core 
 use Env;
-use Carp qw(cluck shortmess longmess croak confess);
-use Carp::Always;
+
+# Local
+use Mojo::Core::Schema;
 
 # 3rd Party
-use Const::Fast;
 use DBIx::Class::Candy;
+use Const::Fast;
 use YAML::XS 'LoadFile';
-use Mojo::JSON qw(decode_json);
+use Mojo::JSON qw(decode_json encode_json);
 use Mojo::File 'path';
 use Mojo::Util;
 use Mojolicious::Lite -signatures;
@@ -27,13 +28,11 @@ use Mojolicious::Plugin::OpenAPI;
 use Net::Amazon::S3;
 use URI;
 
-# Local
-use Mojo::Core::Schema;
-
 # Debugging
 use Data::Dumper::Concise;
+use Carp qw(cluck shortmess longmess croak confess);
+use Carp::Always;
 diagnostics->disable;
-
 
 # Database setup
 helper db => sub {
@@ -41,8 +40,7 @@ helper db => sub {
 };
 
 # Load the OpenAPI specification
-# app->plugin(OpenAPI => {url  => app->home->rel_file('schema.js') });
-plugin OpenAPI => {url => 'file:///perl/schema.js'};
+plugin OpenAPI => {url => 'schema.json'};
 app->secrets(['A1B2c3d$']);
 
 # Collect/create all the minio information
@@ -137,11 +135,6 @@ my $dev_fake_minio = {
         },
     ]
 };
-
-# Load the OpenAPI specification
-plugin OpenAPI => {url => 'schema.js'};
-diagnostics->disable;
-app->secrets(['A1B2c3d$']);
 
 # Make the application return 
 get '/' => sub ($c) {
