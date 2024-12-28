@@ -1,0 +1,15 @@
+/home/paulwebster/work/shiny-octo-tribble/components/worker-template-cs/bin/Debug/net6.0/template
+/home/paulwebster/work/shiny-octo-tribble/components/worker-template-cs/bin/Debug/net6.0/template.deps.json
+/home/paulwebster/work/shiny-octo-tribble/components/worker-template-cs/bin/Debug/net6.0/template.runtimeconfig.json
+/home/paulwebster/work/shiny-octo-tribble/components/worker-template-cs/bin/Debug/net6.0/template.dll
+/home/paulwebster/work/shiny-octo-tribble/components/worker-template-cs/bin/Debug/net6.0/template.pdb
+/home/paulwebster/work/shiny-octo-tribble/components/worker-template-cs/obj/Debug/net6.0/template.GeneratedMSBuildEditorConfig.editorconfig
+/home/paulwebster/work/shiny-octo-tribble/components/worker-template-cs/obj/Debug/net6.0/template.AssemblyInfoInputs.cache
+/home/paulwebster/work/shiny-octo-tribble/components/worker-template-cs/obj/Debug/net6.0/template.AssemblyInfo.cs
+/home/paulwebster/work/shiny-octo-tribble/components/worker-template-cs/obj/Debug/net6.0/template.csproj.CoreCompileInputs.cache
+/home/paulwebster/work/shiny-octo-tribble/components/worker-template-cs/obj/Debug/net6.0/template.sourcelink.json
+/home/paulwebster/work/shiny-octo-tribble/components/worker-template-cs/obj/Debug/net6.0/template.dll
+/home/paulwebster/work/shiny-octo-tribble/components/worker-template-cs/obj/Debug/net6.0/refint/template.dll
+/home/paulwebster/work/shiny-octo-tribble/components/worker-template-cs/obj/Debug/net6.0/template.pdb
+/home/paulwebster/work/shiny-octo-tribble/components/worker-template-cs/obj/Debug/net6.0/template.genruntimeconfig.cache
+/home/paulwebster/work/shiny-octo-tribble/components/worker-template-cs/obj/Debug/net6.0/ref/template.dll
