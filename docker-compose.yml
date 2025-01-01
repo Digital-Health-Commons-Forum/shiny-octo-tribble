@@ -20,8 +20,6 @@ services:
         environment:
             MINIO_ACCESS_KEY: minioadmin
             MINIO_SECRET_KEY: minioadmin
-        volumes:
-            - ./mojo-app:/usr/src/app
         working_dir: /perl
         command: ["perl", "main.pl","daemon"]
         depends_on:
