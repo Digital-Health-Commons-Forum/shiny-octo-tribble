@@ -25,7 +25,6 @@ use Mojo::File 'path';
 use Mojo::Util;
 use Mojolicious::Lite -signatures;
 use Mojolicious::Plugin::OpenAPI;
-use Net::Amazon::S3;
 use URI;
 
 # Debugging
@@ -42,50 +41,6 @@ helper db => sub {
 # Load the OpenAPI specification
 plugin OpenAPI => {url => 'schema.json'};
 app->secrets(['A1B2c3d$']);
-
-# Collect/create all the minio information
-const my $minio_credentials => do {
-    my $minio_access_key        = $ENV{'MINIO_ACCESS_KEY'};
-    my $minio_secret_key        = $ENV{'MINIO_SECRET_KEY'};
-    my $minio_uri               = $ENV{'MINIO_URI'}||'http://127.0.0.1:9000';
-
-    my $minio_uri_obj           = URI->new($minio_uri);
-    my $minio_uri_host          = $minio_uri_obj->host || '127.0.0.1';
-    my $minio_uri_port          = $minio_uri_obj->port || 9000;
-    my $minio_uri_scheme        = $minio_uri_obj->scheme =~ m#^http|https$#i ? lc($minio_uri_obj->scheme) : 'http';
-    my $minio_uri_secure        = $minio_uri_scheme =~ m#^https#i ? 1 : 0;
-
-    my $minio_uri_hostport      = join(':',$minio_uri_host,$minio_uri_port);
-    my ($uri_user,$uri_pass)    = split(':',$minio_uri_obj->userinfo||'');
-    $minio_access_key           ||= $uri_user ? $uri_user : '';
-    $minio_secret_key           ||= $uri_pass ? $uri_pass : '';
-
-    if (!$minio_access_key || !$minio_secret_key) {
-        croak('Missing Minio credentials');
-    }
-
-    {
-        'minio_key_id'          =>  $minio_access_key,
-        'minio_access_key'      =>  $minio_secret_key,
-        'minio_host'            =>  $minio_uri_host,
-        'minio_port'            =>  $minio_uri_port,
-        'minio_scheme'          =>  $minio_uri_scheme,
-        'minio_secure'          =>  $minio_uri_secure,
-        'minio_hostport'        =>  $minio_uri_hostport,
-    }
-};
-
-my $minio_client = do {
-    my $s3 = Net::Amazon::S3->new(
-        {
-            aws_access_key_id     => $minio_credentials->{'minio_key_id'},
-            aws_secret_access_key => $minio_credentials->{'minio_access_key'},
-            host                  => $minio_credentials->{'minio_hostport'},
-            secure                => $minio_credentials->{'minio_secure'},
-        }
-    );
-    Net::Amazon::S3::Client->new( s3 => $s3 )
-};
 
 # Database setup
 helper db => sub {
@@ -139,6 +94,7 @@ my $dev_fake_minio = {
 # Make the application return 
 get '/' => sub ($c) {
     my $routes = [
+        { method => 'POST', path => '/echo', description => 'Echo test' },
         { method => 'POST', path => '/worker', description => 'Create a new worker process' },
         { method => 'GET', path => '/worker/:id', description => 'Get a worker process by ID' },
         { method => 'PUT', path => '/worker/:id', description => 'Update a worker process' },
@@ -167,8 +123,17 @@ post '/echo' => sub {
 
 # Define routes
 post '/workers' => sub ($c) {
+    # When a worker connects it will send a payload that indicates 
+    # its description and such in the style of:
+    #     my $worker_info = {
+    #     'name'          => 'worker-template-perl',
+    #     'description'   => 'This is a template worker written in Perl.',
+    #     'author'        => 'PGW'
+    # };
+    # For now as we are doing dev simply echo this to STDERR
+    say STDERR "Worker connected: ".$c->req->json;
     $c->render(
-        openapi => {
+        json => {
             token => 'session_token'
         }
     );
