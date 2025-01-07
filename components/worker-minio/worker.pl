@@ -35,7 +35,7 @@ my $worker_state = {
 };
 
 # OpenAPI server URL
-my $api_url = 'http://127.0.0.1:3000/';
+my $api_url = URI->new($ENV{'MOJO_API_UI'}||'http://mojo:3000/');
 
 # Collect/create all the minio information
 const my $minio_credentials => do {
@@ -116,9 +116,9 @@ sub interact_with_openapi {
     # and who we are
     if ($worker_state->{'data'}->{'stage'} == 1) {
         my $payload = encode_json($worker_info);
-        my $api_target = $api_url . "worker";
+        my $api_target = $api_url->as_string . "/worker";
         
-        say "Stage(1): Sending worker info to OpenAPI server...";
+        say STDERR "Stage(1): Sending worker info to OpenAPI server... ($api_target)";
         my $response = $ua->post(
             $api_target,
             'Content-Type' => 'application/json',
@@ -130,11 +130,13 @@ sub interact_with_openapi {
             say "Received data from OpenAPI server: ", Dumper $data;
             $worker_info->{'data'}->{'stage'} = 2;
         } else {
-            die "Failed to connect to OpenAPI server: ", $response->status_line;
+            say STDERR "Failed to connect to OpenAPI server: ", $response->status_line;
+            say STDERR "Will retry in 5 seconds...";
+            $_[KERNEL]->delay('interact_with_openapi', 5);
         }
     }
     else {
-        my $response = $ua->get($api_url);
+        my $response = $ua->get($api_url->as_string);
 
         if ($response->is_success) {
             my $data = decode_json($response->decoded_content);
