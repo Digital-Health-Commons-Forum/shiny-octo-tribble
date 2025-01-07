@@ -25,3 +25,4 @@ requires 'XML::SAX::Expat'              ;
 requires 'PkgConfig'                    ;
 requires 'Const::Fast'                  ;
 requires 'Carp::Always'                 ;
+requires 'POE'                          ;
