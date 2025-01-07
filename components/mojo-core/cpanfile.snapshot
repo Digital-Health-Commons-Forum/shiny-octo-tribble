@@ -2444,6 +2444,29 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 6.64
       File::Spec::Functions 0
       perl 5.008
+  IO-Pipely-0.006
+    pathname: R/RC/RCAPUTO/IO-Pipely-0.006.tar.gz
+    provides:
+      IO::Pipely 0.006
+    requirements:
+      Exporter 5.72
+      ExtUtils::MakeMaker 0
+      Fcntl 1.13
+      IO::Socket 1.38
+      Symbol 1.08
+      base 0
+      perl 5.004
+      strict 0
+      warnings 0
+  IO-Tty-1.20
+    pathname: T/TO/TODDR/IO-Tty-1.20.tar.gz
+    provides:
+      IO::Pty 1.20
+      IO::Tty 1.20
+      IO::Tty::Constant 1.20
+    requirements:
+      ExtUtils::MakeMaker 0
+      Test::More 0
   JSON-Validator-5.14
     pathname: J/JH/JHTHORSEN/JSON-Validator-5.14.tar.gz
     provides:
@@ -3637,6 +3660,80 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0
+  POE-1.370
+    pathname: B/BI/BINGOS/POE-1.370.tar.gz
+    provides:
+      POE 1.370
+      POE::Component 1.370
+      POE::Component::Client::TCP 1.370
+      POE::Component::Server::TCP 1.370
+      POE::Driver 1.370
+      POE::Driver::SysRW 1.370
+      POE::Filter 1.370
+      POE::Filter::Block 1.370
+      POE::Filter::Grep 1.370
+      POE::Filter::HTTPD 1.370
+      POE::Filter::Line 1.370
+      POE::Filter::Map 1.370
+      POE::Filter::RecordBlock 1.370
+      POE::Filter::Reference 1.370
+      POE::Filter::Stackable 1.370
+      POE::Filter::Stream 1.370
+      POE::Kernel 1.370
+      POE::Loop 1.370
+      POE::Loop::IO_Poll 1.370
+      POE::Loop::PerlSignals 1.370
+      POE::Loop::Select 1.370
+      POE::NFA 1.370
+      POE::Pipe 1.370
+      POE::Pipe::OneWay 1.370
+      POE::Pipe::TwoWay 1.370
+      POE::Queue 1.370
+      POE::Queue::Array 1.370
+      POE::Resource 1.370
+      POE::Resource::Aliases 1.370
+      POE::Resource::Clock 1.370
+      POE::Resource::Events 1.370
+      POE::Resource::Extrefs 1.370
+      POE::Resource::FileHandles 1.370
+      POE::Resource::SIDs 1.370
+      POE::Resource::Sessions 1.370
+      POE::Resource::Signals 1.370
+      POE::Resources 1.370
+      POE::Session 1.370
+      POE::Test::Sequence 1.370
+      POE::Wheel 1.370
+      POE::Wheel::Curses 1.370
+      POE::Wheel::FollowTail 1.370
+      POE::Wheel::ListenAccept 1.370
+      POE::Wheel::ReadLine 1.370
+      POE::Wheel::ReadLine::Keymap 1.370
+      POE::Wheel::ReadWrite 1.370
+      POE::Wheel::Run 1.370
+      POE::Wheel::SocketFactory 1.370
+    requirements:
+      Carp 0
+      Errno 1.09
+      Exporter 0
+      File::Spec 0.87
+      IO 1.24
+      IO::Handle 1.27
+      IO::Pipely 0.005
+      IO::Tty 1.08
+      POE::Test::Loops 1.360
+      POSIX 1.02
+      Socket 1.7
+      Storable 2.16
+      Test::Harness 2.26
+      Time::HiRes 1.59
+  POE-Test-Loops-1.360
+    pathname: R/RC/RCAPUTO/POE-Test-Loops-1.360.tar.gz
+    provides:
+      POE::Test::DondeEstan 1.360
+      POE::Test::Loops 1.360
+    requirements:
+      ExtUtils::MakeMaker 0
+      Test::More 1.001002
   Package-DeprecationManager-0.18
     pathname: D/DR/DROLSKY/Package-DeprecationManager-0.18.tar.gz
     provides:
