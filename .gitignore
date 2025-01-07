@@ -49,3 +49,5 @@ components/mojo-core/Mojo-Core-*.*
 # components/mojo-core/dev/
 docker-compose.override.yml
 
+# Ignore .bash_history files, everywhere
+.bash_history
