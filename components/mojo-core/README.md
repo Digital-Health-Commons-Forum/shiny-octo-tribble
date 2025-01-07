@@ -13,6 +13,7 @@ step 'release'.
 
 The order from the start:
 
+* docker pull perl:5.40.0
 * docker build -f Dockerfile.base -t mojocore:base .
 * docker build -f Dockerfile.tweaks -t mojocore:tweaks .
 * docker build -f Dockerfile.release -t mojocore:release .
