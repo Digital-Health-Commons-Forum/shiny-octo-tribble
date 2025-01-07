@@ -8,7 +8,7 @@ use v5.30;
 
 use Carp::Always;
 
-our $VERSION = '0.026';
+our $VERSION = '0.027';
 
 use base 'DBIx::Class::Schema';
 __PACKAGE__->load_namespaces;
