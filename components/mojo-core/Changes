@@ -1,10 +1,14 @@
-Revision history for Perl extension [Your-Module-Name]
+Revision history for Perl extension [Mojo::Core]
 
 {{$NEXT}}
+
+0.026     2025-01-07 21:37:58 GMT
     * Changed the version in main.pl to the same style as the module versions
     to see if it will still get version bumped
     * Added Const::Fast into the cpanfile and codebase in replacement of Readonly
     * Added Carp & Carp::Always
+    * Added a new route to the application to test the new modules
+    * Abstracted minio into a new worker
 0.025     2024-12-05 00:16:33 GMT
     * Updated API heavily
     * Default connects to minio
