@@ -33,6 +33,19 @@ use Carp qw(cluck shortmess longmess croak confess);
 use Carp::Always;
 diagnostics->disable;
 
+# Signal handlers
+$SIG{TERM} = sub {
+    say STDERR "Received TERM signal, shutting down...";
+    app->stop;
+    exit 0;
+};
+
+$SIG{INT} = sub {
+    say STDERR "Received INT signal, shutting down...";
+    app->stop;
+    exit 0;
+};
+
 # Database setup
 helper db => sub {
     state $schema = Mojo::Core::Schema->connect('dbi:SQLite:dbname=core.db');
@@ -131,7 +144,7 @@ post '/worker' => sub ($c) {
     #     'author'        => 'PGW'
     # };
     # For now as we are doing dev simply echo this to STDERR
-    say STDERR "Worker connected: ".$c->req->json;
+    say STDERR "Worker connected: ".Dumper $c->req->json;
     $c->render(
         json => {
             token => 'session_token'
