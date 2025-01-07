@@ -103,11 +103,14 @@ exit;
 
 # Start state for interacting with OpenAPI server
 sub start_interact_with_openapi {
-    $_[KERNEL]->yield('interact_with_openapi');
+    my ($kernel,$heap,$session,$sender,$state) = @_[KERNEL,HEAP,SESSION,SENDER,STATE];
+    $kernel->yield('interact_with_openapi');
 }
 
 # Function to interact with OpenAPI server
 sub interact_with_openapi {
+    my ($kernel,$heap,$session,$sender,$state) = @_[KERNEL,HEAP,SESSION,SENDER,STATE];
+
     # Should really use a proper HTTP client library here, but this is just a template
     my $ua = LWP::UserAgent->new;
 
@@ -132,7 +135,7 @@ sub interact_with_openapi {
         } else {
             say STDERR "Failed to connect to OpenAPI server: ", $response->status_line;
             say STDERR "Will retry in 5 seconds...";
-            $_[KERNEL]->delay('interact_with_openapi', 5);
+            $kernel->delay('interact_with_openapi', 5);
         }
     }
     else {
@@ -149,11 +152,14 @@ sub interact_with_openapi {
 
 # Start state for additional operation
 sub start_additional_operation {
-    $_[KERNEL]->yield('additional_operation');
+    my ($kernel,$heap,$session,$sender,$state) = @_[KERNEL,HEAP,SESSION,SENDER,STATE];
+    $kernel->yield('additional_operation');
 }
 
 # Additional operation function
 sub additional_operation {
+    my ($kernel,$heap,$session,$sender,$state) = @_[KERNEL,HEAP,SESSION,SENDER,STATE];
     say "Performing additional operation...\n";
     # Add your additional operation code here
+    $kernel->delay('additional_operation', 5);
 }
