@@ -1,4 +1,4 @@
-FROM perl:5.40.0-slim
+FROM perl:5.40.0
 
 # Set working directory
 WORKDIR /app
