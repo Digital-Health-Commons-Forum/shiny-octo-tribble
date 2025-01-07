@@ -358,6 +358,22 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
+  Cpanel-JSON-XS-4.39
+    pathname: R/RU/RURBAN/Cpanel-JSON-XS-4.39.tar.gz
+    provides:
+      Cpanel::JSON::XS 4.39
+      Cpanel::JSON::XS::Type undef
+    requirements:
+      Carp 0
+      Config 0
+      Encode 1.9801
+      Exporter 0
+      ExtUtils::MakeMaker 0
+      Pod::Text 2.08
+      XSLoader 0
+      overload 0
+      strict 0
+      warnings 0
   DBD-SQLite-1.76
     pathname: I/IS/ISHIGAKI/DBD-SQLite-1.76.tar.gz
     provides:
@@ -2467,6 +2483,17 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0
+  JSON-MaybeXS-1.004008
+    pathname: E/ET/ETHER/JSON-MaybeXS-1.004008.tar.gz
+    provides:
+      JSON::MaybeXS 1.004008
+    requirements:
+      Carp 0
+      Cpanel::JSON::XS 4.38
+      ExtUtils::MakeMaker 0
+      JSON::PP 2.27300
+      Scalar::Util 0
+      perl 5.006
   JSON-Validator-5.14
     pathname: J/JH/JHTHORSEN/JSON-Validator-5.14.tar.gz
     provides:

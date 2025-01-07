@@ -26,3 +26,4 @@ requires 'PkgConfig'                    ;
 requires 'Const::Fast'                  ;
 requires 'Carp::Always'                 ;
 requires 'POE'                          ;
+requires 'JSON::MaybeXS'                ;
