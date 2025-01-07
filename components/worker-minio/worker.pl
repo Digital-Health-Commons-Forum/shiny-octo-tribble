@@ -19,9 +19,13 @@ use Net::Amazon::S3;
 
 # Details about this worker
 my $worker_info = {
-    'name'          => 'worker-template-perl',
+    'name'          => 'worker-minio',
     'description'   => 'This is a template worker written in Perl.',
-    'author'        => 'PGW'
+    'author'        => 'PGW',
+    'offer'         => {
+        'minio'         =>  'This worker offers simple functions for dealing with minio'
+    },
+    'version'       => $VERSION,
 };
 
 # A place to store worker state
@@ -79,6 +83,19 @@ my $minio_client = do {
         }
     );
     Net::Amazon::S3::Client->new( s3 => $s3 )
+};
+
+# Signal handlers
+$SIG{TERM} = sub {
+    say STDERR "Received TERM signal, exiting...";
+    POE::Kernel->stop();
+    exit(0);
+};
+
+$SIG{INT} = sub {
+    say STDERR "Received INT signal, exiting...";
+    POE::Kernel->stop();
+    exit(0);
 };
 
 # Session to interact with OpenAPI server
@@ -159,7 +176,7 @@ sub start_additional_operation {
 # Additional operation function
 sub additional_operation {
     my ($kernel,$heap,$session,$sender,$state) = @_[KERNEL,HEAP,SESSION,SENDER,STATE];
-    say "Performing additional operation...\n";
+    say STDERR "Performing additional operation...";
     # Add your additional operation code here
     $kernel->delay('additional_operation', 5);
 }
