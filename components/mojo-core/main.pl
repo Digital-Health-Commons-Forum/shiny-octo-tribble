@@ -122,7 +122,7 @@ post '/echo' => sub {
 }, 'echo';
 
 # Define routes
-post '/workers' => sub ($c) {
+post '/worker' => sub ($c) {
     # When a worker connects it will send a payload that indicates 
     # its description and such in the style of:
     #     my $worker_info = {
