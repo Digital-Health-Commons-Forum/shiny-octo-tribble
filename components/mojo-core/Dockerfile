@@ -1,4 +1,4 @@
-FROM mojocore:base
+FROM mojocore:mojobase-dev
 
 # Make a working directory
 RUN mkdir /install
