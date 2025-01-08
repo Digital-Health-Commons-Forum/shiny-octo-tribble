@@ -17,6 +17,8 @@ use JSON::MaybeXS ':all';
 use Data::Dumper::Concise;
 use Net::Amazon::S3;
 
+sleep 5;
+
 # Details about this worker
 my $worker_info = {
     'name'          => 'worker-minio',
@@ -47,6 +49,9 @@ const my $minio_credentials => do {
     my $minio_secret_key        = $ENV{'MINIO_SECRET_KEY'};
     my $minio_uri               = $ENV{'MINIO_URI'}||'http://127.0.0.1:9000';
 
+    my $minio_admin_key         = $ENV{'MINIO_ROOT_USER'};
+    my $minio_admin_pass        = $ENV{'MINIO_ROOT_PASSWORD'};
+
     my $minio_uri_obj           = URI->new($minio_uri);
     my $minio_uri_host          = $minio_uri_obj->host || '127.0.0.1';
     my $minio_uri_port          = $minio_uri_obj->port || 9000;
@@ -65,24 +70,14 @@ const my $minio_credentials => do {
     {
         'minio_key_id'          =>  $minio_access_key,
         'minio_access_key'      =>  $minio_secret_key,
+        'minio_admin_key'       =>  $minio_admin_key,
+        'minio_admin_pass'      =>  $minio_admin_pass,
         'minio_host'            =>  $minio_uri_host,
         'minio_port'            =>  $minio_uri_port,
         'minio_scheme'          =>  $minio_uri_scheme,
         'minio_secure'          =>  $minio_uri_secure,
         'minio_hostport'        =>  $minio_uri_hostport,
     }
-};
-
-my $minio_client = do {
-    my $s3 = Net::Amazon::S3->new(
-        {
-            aws_access_key_id     => $minio_credentials->{'minio_key_id'},
-            aws_secret_access_key => $minio_credentials->{'minio_access_key'},
-            host                  => $minio_credentials->{'minio_hostport'},
-            secure                => $minio_credentials->{'minio_secure'},
-        }
-    );
-    Net::Amazon::S3::Client->new( s3 => $s3 )
 };
 
 # Signal handlers
@@ -111,6 +106,8 @@ POE::Session->create(
     inline_states => {
         _start => \&start_additional_operation,
         additional_operation => \&additional_operation,
+        validate_minio => \&validate_minio,
+        initilize_minio => \&initilize_minio,
     },
 );
 
@@ -176,7 +173,97 @@ sub start_additional_operation {
 # Additional operation function
 sub additional_operation {
     my ($kernel,$heap,$session,$sender,$state) = @_[KERNEL,HEAP,SESSION,SENDER,STATE];
-    say STDERR "Performing additional operation...";
-    # Add your additional operation code here
+    say STDERR "Waiting";
+
+    if ($worker_info->{'data'}->{'stage'} == 2) {
+        say STDERR "Stage(2): Validating minio presense & bucket 'media'...";
+        $kernel->yield('validate_minio');
+    }
+    else {
+        $kernel->delay('additional_operation', 5);
+    }
+}
+
+# Validate Minio/S3 and check for 'media' bucket
+sub validate_minio {
+    my ($kernel,$heap,$session,$sender,$state) = @_[KERNEL,HEAP,SESSION,SENDER,STATE];
+    say STDERR "Validating Minio/S3 connection and checking for access...";
+
+    if ($worker_info->{'data'}->{'stage'} == 2) {
+        $kernel->yield('initilize_minio');
+    }
+    elsif ($worker_info->{'data'}->{'stage'} == 3) {
+        my $minio_client = do {
+            my $s3 = Net::Amazon::S3->new(
+            {
+                aws_access_key_id     => $minio_credentials->{'minio_key_id'},
+                aws_secret_access_key => $minio_credentials->{'minio_access_key'},
+                host                  => $minio_credentials->{'minio_hostport'},
+                secure                => $minio_credentials->{'minio_secure'},
+            }
+            );
+            Net::Amazon::S3::Client->new( s3 => $s3 )
+        };
+
+        $heap->{'minio_client'} = $minio_client;
+        
+        my $response = $minio_client->buckets;
+        if ($response) {
+            say STDERR "Buckets available on Minio server:";
+            foreach my $bucket ( @{ $response->{buckets} } ) {
+            say STDERR "Bucket: " . $bucket->bucket;
+            }
+            $worker_info->{'data'}->{'stage'} = 3;
+        } else {
+            say STDERR "Failed to list buckets.";
+        }
+    }
+
     $kernel->delay('additional_operation', 5);
+}
+
+sub initilize_minio {
+    my ($kernel,$heap,$session,$sender,$state) = @_[KERNEL,HEAP,SESSION,SENDER,STATE];
+    say STDERR "Initializing Minio/S3 connection...";
+
+    eval {
+        my $alias_cmd = sprintf(
+            'mc alias set worker %s %s %s',
+            $minio_credentials->{'minio_scheme'} . '://' . $minio_credentials->{'minio_hostport'},
+            $minio_credentials->{'minio_admin_key'},
+            $minio_credentials->{'minio_admin_pass'}
+        );
+        say STDERR "Alias command: $alias_cmd";
+        system($alias_cmd) == 0 or die "Failed to set alias: $!";
+
+        my $user_cmd = sprintf(
+            'mc admin user add worker %s %s',
+            $minio_credentials->{'minio_key_id'},
+            $minio_credentials->{'minio_access_key'},
+        );
+        say STDERR "User command: $user_cmd";
+        system($user_cmd) == 0 or die "Failed to add host config: $!";
+
+        my $permission_cmd = sprintf(
+            'mc admin policy attach worker readwrite --user=%s',
+            $minio_credentials->{'minio_key_id'},
+        );
+        say STDERR "Permission command: $permission_cmd";
+        system($permission_cmd) == 0 or die "Failed to add host config: $!";
+
+        my $bucket_cmd = 'mc mb worker/media 2>&1';
+        say STDERR "Bucket command: $bucket_cmd";
+        my $output = `$bucket_cmd`;
+        if ($output =~ m#(?:Bucket created successfully|you already own it)#) {
+            say STDERR "Bucket 'media' created successfully";
+            $worker_info->{'data'}->{'stage'} = 3;
+            $kernel->yield('validate_minio');
+        }
+        else {
+            die "Failed to create bucket: $output";
+        }
+    };
+    if ($@) {
+        say STDERR "Error during Minio setup: $@";
+    }
 }
