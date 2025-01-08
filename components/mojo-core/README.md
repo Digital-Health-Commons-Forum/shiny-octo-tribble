@@ -13,7 +13,26 @@ step 'release'.
 
 The order from the start:
 
-* docker pull perl:5.40.0
-* docker build -f Dockerfile.base -t mojocore:base .
-* docker build -f Dockerfile.tweaks -t mojocore:tweaks .
-* docker build -f Dockerfile.release -t mojocore:release .
+First the base:
+
+```bash
+    cd repo-base/components && docker build -t mojocore:base .
+```
+
+Then whichever component you which to build (lets say core):
+
+```bash
+    cd repo-base/components/mojo-core && docker build -t mojocore:core-dev .
+```
+
+Or perhaps you wish to build worker-minio:
+
+```bash
+    cd repo-base/components/worker-minio && docker build -t mojocore:minio-dev .
+```
+
+Then if you wish to build a release:
+
+```bash
+    cd repo-base/components/mojo-core && docker build -f Dockerfile.release -t mojocore:release .
+```
