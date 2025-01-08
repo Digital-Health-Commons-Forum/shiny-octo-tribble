@@ -19,3 +19,11 @@ Before reading or doing anything with the following make sure to checkout:
 - [Dist::Zilla::PluginBundle::Starter::Git](https://metacpan.org/pod/Dist::Zilla::PluginBundle::Starter::Git)
 - [Carton](https://metacpan.org/dist/Carton/view/script/carton)
 - [Docker](https://www.docker.com)
+
+## Initial docker image
+
+```bash
+docker build -t mojocore::base -f components/Dockerfile .
+```
+
+Then read the README.md in the components directory for further instructions.
