@@ -27,3 +27,4 @@ requires 'Const::Fast'                  ;
 requires 'Carp::Always'                 ;
 requires 'POE'                          ;
 requires 'JSON::MaybeXS'                ;
+requires 'AWS::S3'                      ;
