@@ -31,7 +31,12 @@ RUN apt update -y \
         libxml-simple-perl \
         python3-full \
         python3-requests \
-        python3-boto3 
+        python3-boto3 \
+        python3-venv \
+        nano
+
+# Create a symlink for python
+RUN ln -s /usr/bin/python3 /usr/bin/python
 
 # Install the required packages (perl)
 RUN cpanm --from "$PWD/vendor/cache" --installdeps --notest --quiet .

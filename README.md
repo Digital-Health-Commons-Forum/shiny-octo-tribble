@@ -23,7 +23,7 @@ Before reading or doing anything with the following make sure to checkout:
 ## Initial docker image
 
 ```bash
-docker build -t mojocore::base -f components/Dockerfile .
+cd components && docker build -t mojocore:mojobase-dev -f components/Dockerfile .
 ```
 
 Then read the README.md in the components directory for further instructions.

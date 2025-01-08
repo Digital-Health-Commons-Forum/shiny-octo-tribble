@@ -1,7 +1,7 @@
-FROM mojocore:base AS worker-minio
+FROM mojocore:mojobase-dev AS worker-minio
 
 USER worker
 
+COPY run.sh /run.sh
 
-
-CMD ["bash"]
+CMD ["/run.sh"]
