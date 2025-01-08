@@ -1,5 +1,55 @@
 # carton snapshot format: version 1.0
 DISTRIBUTIONS
+  AWS-S3-0.19
+    pathname: L/LE/LEEJO/AWS-S3-0.19.tar.gz
+    provides:
+      AWS::S3 0.19
+      AWS::S3::Bucket undef
+      AWS::S3::File undef
+      AWS::S3::FileIterator undef
+      AWS::S3::HTTPRequest undef
+      AWS::S3::Owner undef
+      AWS::S3::Request::CreateBucket undef
+      AWS::S3::Request::DeleteBucket undef
+      AWS::S3::Request::DeleteFile undef
+      AWS::S3::Request::DeleteMulti undef
+      AWS::S3::Request::GetBucketAccessControl undef
+      AWS::S3::Request::GetBucketLocationConstraint undef
+      AWS::S3::Request::GetBucketPolicy undef
+      AWS::S3::Request::GetFileContents undef
+      AWS::S3::Request::GetFileInfo undef
+      AWS::S3::Request::GetPreSignedUrl undef
+      AWS::S3::Request::ListAllMyBuckets undef
+      AWS::S3::Request::ListBucket undef
+      AWS::S3::Request::SetBucketAccessControl undef
+      AWS::S3::Request::SetBucketPolicy undef
+      AWS::S3::Request::SetFileContents undef
+      AWS::S3::ResponseParser undef
+      AWS::S3::Roles::Bucket undef
+      AWS::S3::Roles::BucketAction undef
+      AWS::S3::Roles::Request undef
+      AWS::S3::Signer undef
+    requirements:
+      Carp 0
+      Class::Load 0
+      Data::Section::Simple 0
+      Digest::HMAC_SHA1 0
+      ExtUtils::MakeMaker 0
+      HTTP::Date 0
+      HTTP::Headers 6.07
+      JSON::XS 0
+      LWP::UserAgent::Determined 0
+      MIME::Base64 0
+      Moose 2.0
+      MooseX::Types 0
+      MooseX::Types::URI 0
+      Test::Deep 0.112
+      Test::Exception 0.32
+      Test::More 0.31
+      URI::Escape 0
+      XML::LibXML 0
+      XML::LibXML::XPathContext 0
+      perl 5.010001
   Algorithm-C3-0.11
     pathname: H/HA/HAARG/Algorithm-C3-0.11.tar.gz
     provides:
@@ -151,6 +201,12 @@ DISTRIBUTIONS
       perl 5.006001
       strict 0
       warnings 0
+  Canary-Stability-2013
+    pathname: M/ML/MLEHMANN/Canary-Stability-2013.tar.gz
+    provides:
+      Canary::Stability 2013
+    requirements:
+      ExtUtils::MakeMaker 0
   Capture-Tiny-0.48
     pathname: D/DA/DAGOLDEN/Capture-Tiny-0.48.tar.gz
     provides:
@@ -653,6 +709,12 @@ DISTRIBUTIONS
       perl 5.012
       strict 0
       warnings 0
+  Data-Section-Simple-0.07
+    pathname: M/MI/MIYAGAWA/Data-Section-Simple-0.07.tar.gz
+    provides:
+      Data::Section::Simple 0.07
+    requirements:
+      ExtUtils::MakeMaker 6.30
   Data-Stream-Bulk-0.11
     pathname: D/DO/DOY/Data-Stream-Bulk-0.11.tar.gz
     provides:
@@ -2517,6 +2579,15 @@ DISTRIBUTIONS
       Mojolicious 7.28
       YAML::XS 0.67
       perl 5.016
+  JSON-XS-4.03
+    pathname: M/ML/MLEHMANN/JSON-XS-4.03.tar.gz
+    provides:
+      JSON::XS 4.03
+    requirements:
+      Canary::Stability 0
+      ExtUtils::MakeMaker 6.52
+      Types::Serialiser 0
+      common::sense 0
   LWP-MediaTypes-6.04
     pathname: O/OA/OALDERS/LWP-MediaTypes-6.04.tar.gz
     provides:
@@ -3455,6 +3526,27 @@ DISTRIBUTIONS
       Time::Duration::Parse 0.06
       if 0
       namespace::clean 0.19
+      perl 5.006
+      strict 0
+      warnings 0
+  MooseX-Types-URI-0.09
+    pathname: E/ET/ETHER/MooseX-Types-URI-0.09.tar.gz
+    provides:
+      MooseX::Types::URI 0.09
+    requirements:
+      ExtUtils::MakeMaker 0
+      Module::Build::Tiny 0.034
+      MooseX::Types 0.40
+      MooseX::Types::Moose 0
+      Scalar::Util 0
+      URI 0
+      URI::FromHash 0
+      URI::QueryParam 0
+      URI::WithBase 0
+      URI::data 0
+      URI::file 0
+      if 0
+      namespace::autoclean 0
       perl 5.006
       strict 0
       warnings 0
@@ -4504,6 +4596,16 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
+  Types-Serialiser-1.01
+    pathname: M/ML/MLEHMANN/Types-Serialiser-1.01.tar.gz
+    provides:
+      JSON::PP::Boolean 1.01
+      Types::Serialiser 1.01
+      Types::Serialiser::BooleanBase 1.01
+      Types::Serialiser::Error 1.01
+    requirements:
+      ExtUtils::MakeMaker 0
+      common::sense 0
   UNIVERSAL-can-1.20140328
     pathname: C/CH/CHROMATIC/UNIVERSAL-can-1.20140328.tar.gz
     provides:
@@ -4600,6 +4702,18 @@ DISTRIBUTIONS
       perl 5.008001
       strict 0
       utf8 0
+      warnings 0
+  URI-FromHash-0.05
+    pathname: D/DR/DROLSKY/URI-FromHash-0.05.tar.gz
+    provides:
+      URI::FromHash 0.05
+    requirements:
+      Carp 0
+      Exporter 0
+      ExtUtils::MakeMaker 0
+      Params::Validate 0
+      URI 1.68
+      strict 0
       warnings 0
   Variable-Magic-0.64
     pathname: V/VP/VPIT/Variable-Magic-0.64.tar.gz
@@ -4826,6 +4940,12 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       perl 5.008001
+  common-sense-3.75
+    pathname: M/ML/MLEHMANN/common-sense-3.75.tar.gz
+    provides:
+      common::sense 3.75
+    requirements:
+      ExtUtils::MakeMaker 0
   libwww-perl-6.77
     pathname: O/OA/OALDERS/libwww-perl-6.77.tar.gz
     provides:
