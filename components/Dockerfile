@@ -1,4 +1,4 @@
-FROM perl:5.40.0
+FROM perl:5.40.0 AS mojocore_base
 
 # Set working directory
 WORKDIR /build
@@ -42,9 +42,8 @@ RUN ln -s /usr/bin/python3 /usr/bin/python
 RUN cpanm --from "$PWD/vendor/cache" --installdeps --notest --quiet .
 
 # Install the MinIO client
-RUN wget https://dl.min.io/client/mc/release/linux-amd64/mc -O /usr/local/bin/mc \
-    && chmod +x /usr/local/bin/mc \
-    && chmod 555 /usr/local/bin/mc
+COPY mojo-core/tools/install-minio.sh /tmp/install-minio.sh
+RUN chmod +x /tmp/install-minio.sh && /tmp/install-minio.sh
 
 # Add a user to run the application
 RUN useradd -m -d /app worker
@@ -54,12 +53,13 @@ RUN chown worker:worker /app
 RUN apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /app/* \
-    && rm -rf /build/*
+    && rm -rf /build/* \
+    && rm -Rf /tmp/*
 
 # Flatten the image
 FROM scratch AS flatten
 
-COPY --from=mojocore:base / /
+COPY --from=mojocore_base / /
 
 # Set a generic command
 RUN echo "Base built, now use the Dockerfile's in the components directory."
