@@ -1,6 +1,6 @@
 FROM mojocore:mojobase-dev AS service-minio
 
-USER worker
+USER service
 
 COPY run.sh /run.sh
 

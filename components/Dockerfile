@@ -46,10 +46,8 @@ COPY mojo-core/tools/install-minio.sh /tmp/install-minio.sh
 RUN chmod +x /tmp/install-minio.sh && /tmp/install-minio.sh
 
 # Add a user to run the application
-RUN useradd -m -d /app worker
-RUN useradd -m -d /app service
-RUN chown worker:worker /app
-RUN chown service:service /service
+RUN useradd -m -d /app worker && useradd -m -d /service service
+RUN chown worker:worker /app && chown service:service /service
 
 # Clean up the image
 RUN apt-get clean \
