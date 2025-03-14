@@ -1,9 +1,9 @@
 services:
     minio:
-        image: mojocore:worker-minio-dev
+        image: mojocore:service-minio-dev
         container_name: minio
         environment:
-            MINIO_DATA_DIR: /app/minio
+            MINIO_DATA_DIR: /service/minio
             MINIO_ROOT_USER: 9fQuwMfXKMDwh9xd2YN6
             MINIO_ROOT_PASSWORD: SGPKltl5v4FgshdB6zem8EZNyfaw3IgvdH35L5Cm
         volumes:
@@ -18,22 +18,6 @@ services:
             - minio
         ports:
             - "3000:3000"
-
-    worker_minio:
-        image: mojocore:worker-minio-dev
-        container_name: worker_minio
-        environment:
-            MINIO_ROOT_USER: 9fQuwMfXKMDwh9xd2YN6
-            MINIO_ROOT_PASSWORD: SGPKltl5v4FgshdB6zem8EZNyfaw3IgvdH35L5Cm
-            MINIO_URI: http://minio:9000
-            MOJO_API_UI: http://mojo:3000
-        volumes:
-            - ./components/worker-minio:/worker
-        working_dir: /worker
-        command: ["/run.sh"]
-        depends_on:
-            - mojo
-            - minio
 
 volumes:
     minio-data:
