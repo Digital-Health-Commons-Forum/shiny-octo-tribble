@@ -1,6 +1,6 @@
 services:
     minio:
-        image: minio/minio
+        image: mojocore:worker-minio-dev
         container_name: minio
         environment:
             MINIO_DATA_DIR: /app/minio
