@@ -1,23 +1,16 @@
 services:
-    minio:
-        image: mojocore:service-minio-dev
-        container_name: minio
-        environment:
-            MINIO_DATA_DIR: /service/minio
-            MINIO_ROOT_USER: 9fQuwMfXKMDwh9xd2YN6
-            MINIO_ROOT_PASSWORD: SGPKltl5v4FgshdB6zem8EZNyfaw3IgvdH35L5Cm
-        volumes:
-            - minio-data:/app/minio
-
-    mojo:
-        image: mojocore:release
-        container_name: mojo
-        working_dir: /worker
-        command: ["perl", "main.pl","daemon"]
-        depends_on:
-            - minio
+    frontend:
+        build:
+            context: ./components/front-end
+            dockerfile: Dockerfile
+        container_name: frontend
         ports:
-            - "3000:3000"
+            - "5173:5173"
+        volumes:
+            - ./components/front-end:/app
+            - /app/node_modules
+        environment:
+            - NODE_ENV=development
 
 volumes:
     minio-data:

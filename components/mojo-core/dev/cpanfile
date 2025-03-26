@@ -1,4 +1,0 @@
-requires 'Dist::Zilla::Plugin::Prereqs::FromCPANfile';
-requires 'Dist::Zilla::PluginBundle::Starter::Git';
-requires 'Dist::Zilla::Plugin::Run::Release';
-requires 'Carton';
