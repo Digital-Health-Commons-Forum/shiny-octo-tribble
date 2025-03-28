@@ -7,6 +7,8 @@ import magic  # for file type detection
 from datetime import datetime
 import logging
 from tqdm import tqdm
+import hashlib
+import base64
 
 # Import and configure Tesseract
 try:
@@ -197,26 +199,48 @@ class DocumentProcessor:
             logging.error(f"Error extracting text from image {file_path}: {str(e)}")
             return ""
 
+    def generate_identifier(self, file_size: int, file_name: str, modified_time: str) -> str:
+        """Generate a unique identifier using SHA256 and base64 encoding."""
+        # Combine the fields with a separator
+        combined = f"{file_size}|{file_name}|{modified_time}"
+        # Create SHA256 hash
+        sha256_hash = hashlib.sha256(combined.encode('utf-8')).digest()
+        # Convert to base64 and remove padding
+        return base64.b64encode(sha256_hash).decode('utf-8').rstrip('=')
+
     def get_file_metadata(self, file_path: Path) -> Dict[str, Any]:
-        """Get file metadata."""
+        """Get metadata for a file."""
         try:
+            # Get the full relative path and normalize it to use forward slashes
+            relative_path = file_path.relative_to(self.input_dir)
+            normalized_path = str(relative_path).replace('\\', '/')
+            
+            # Get file stats
             stat = file_path.stat()
-            # Get the relative path from the input directory, preserving the full path structure
-            relative_path = str(file_path.relative_to(self.input_dir))
+            file_size = stat.st_size
+            file_name = file_path.name
+            modified_time = datetime.fromtimestamp(stat.st_mtime).isoformat()
+            
+            # Generate identifier
+            identifier = self.generate_identifier(file_size, file_name, modified_time)
+            
             return {
-                "file_name": file_path.name,
-                "file_path": relative_path,
-                "file_size": stat.st_size,
-                "created_time": datetime.fromtimestamp(stat.st_ctime).isoformat(),
-                "modified_time": datetime.fromtimestamp(stat.st_mtime).isoformat(),
-                "file_type": self.mime.from_file(str(file_path))
+                'file_name': file_name,
+                'file_path': normalized_path,
+                'file_size': file_size,
+                'created_time': datetime.fromtimestamp(stat.st_ctime).isoformat(),
+                'modified_time': modified_time,
+                'file_type': self.mime.from_file(str(file_path)),
+                'identifier': identifier
             }
         except Exception as e:
             logging.error(f"Error getting metadata for {file_path}: {str(e)}")
+            # Return basic metadata even if there's an error
             return {
-                "file_name": file_path.name,
-                "file_path": str(file_path.relative_to(self.input_dir)),
-                "file_type": "unknown"
+                'file_name': file_path.name,
+                'file_path': str(file_path.relative_to(self.input_dir)).replace('\\', '/'),
+                'file_type': self.mime.from_file(str(file_path)),
+                'identifier': 'error_generating_identifier'
             }
 
     def extract_summary(self, text: str) -> str:
