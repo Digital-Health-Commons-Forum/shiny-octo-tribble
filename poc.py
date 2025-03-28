@@ -20,11 +20,15 @@ except ImportError:
 import warnings
 warnings.filterwarnings('ignore', message='.*nltk.*')
 
+# Create log directory if it doesn't exist
+log_dir = Path("log")
+log_dir.mkdir(exist_ok=True)
+
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler('processing.log'),
+        logging.FileHandler(log_dir / 'processing.log'),
         logging.StreamHandler()
     ]
 )
