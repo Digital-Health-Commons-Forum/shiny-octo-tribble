@@ -9,6 +9,7 @@ import logging
 from tqdm import tqdm
 import hashlib
 import base64
+import shutil
 
 # Import and configure Tesseract
 try:
@@ -467,10 +468,9 @@ class DocumentProcessor:
                 "tags": []
             }
 
-    def process_file(self, file_path: str) -> Dict[str, Any]:
-        """Process a single file and return extracted information."""
+    def process_file(self, file_path: Path) -> Dict[str, Any]:
+        """Process a single file and return the results."""
         try:
-            file_path = Path(file_path)
             logging.info(f"Checking file type for: {file_path}")
             if not self.is_supported_file_type(file_path):
                 logging.warning(f"Unsupported file type: {file_path}")
@@ -537,19 +537,23 @@ class DocumentProcessor:
                     'tags': self.extract_tags(text),
                     'content_type': 'document'
                 }
-
-            # Save results maintaining the full directory structure
-            relative_path = file_path.relative_to(self.input_dir)
-            output_file = self.output_dir / relative_path.parent / f"{file_path.stem}.json"
-            output_file.parent.mkdir(parents=True, exist_ok=True)
-            logging.info(f"Saving results to: {output_file}")
-            with open(output_file, 'w', encoding='utf-8') as f:
+            
+            # Save the original file to output/ with the new name
+            output_file = self.output_dir / result['_stash']['stage1_filename']
+            shutil.copy2(file_path, output_file)
+            logging.info(f"Saved original file to: {output_file}")
+            
+            # Save the analysis JSON to output/ with the new name
+            output_json = self.output_dir / result['_stash']['stage1_dataname']
+            with open(output_json, 'w', encoding='utf-8') as f:
                 json.dump(result, f, indent=2, ensure_ascii=False)
-
+            logging.info(f"Saved analysis to: {output_json}")
+            
             return result
+            
         except Exception as e:
             logging.error(f"Error processing {file_path}: {str(e)}")
-            return None
+            raise
 
     def process_directory(self, directory: Path) -> List[Dict[str, Any]]:
         """Process all files in a directory and its subdirectories."""
@@ -570,7 +574,7 @@ class DocumentProcessor:
                         
                     # Process the file
                     pbar.set_description(f"Processing {file_path.name}")
-                    result = self.process_file(str(file_path))
+                    result = self.process_file(file_path)
                     
                     if result:
                         results.append(result)
@@ -607,7 +611,7 @@ def main():
         output_dir = Path("asset/output")
         
         processor = DocumentProcessor(str(input_dir), str(output_dir))
-        result = processor.process_file(str(file_path))
+        result = processor.process_file(file_path)
         
         if result:
             print(f"Successfully processed {file_path}")
