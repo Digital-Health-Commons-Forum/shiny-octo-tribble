@@ -221,17 +221,13 @@ class DocumentProcessor:
             file_name = file_path.name
             modified_time = datetime.fromtimestamp(stat.st_mtime).isoformat()
             
-            # Generate identifier
-            identifier = self.generate_identifier(file_size, file_name, modified_time)
-            
             return {
                 'file_name': file_name,
                 'file_path': normalized_path,
                 'file_size': file_size,
                 'created_time': datetime.fromtimestamp(stat.st_ctime).isoformat(),
                 'modified_time': modified_time,
-                'file_type': self.mime.from_file(str(file_path)),
-                'identifier': identifier
+                'file_type': self.mime.from_file(str(file_path))
             }
         except Exception as e:
             logging.error(f"Error getting metadata for {file_path}: {str(e)}")
@@ -239,8 +235,7 @@ class DocumentProcessor:
             return {
                 'file_name': file_path.name,
                 'file_path': str(file_path.relative_to(self.input_dir)).replace('\\', '/'),
-                'file_type': self.mime.from_file(str(file_path)),
-                'identifier': 'error_generating_identifier'
+                'file_type': self.mime.from_file(str(file_path))
             }
 
     def extract_summary(self, text: str) -> str:
@@ -498,12 +493,21 @@ class DocumentProcessor:
                 logging.warning(f"No text extracted from {file_path}")
                 return None
 
-            # Get metadata
+            # Get metadata and generate identifier
             metadata = self.get_file_metadata(file_path)
+            identifier = self.generate_identifier(
+                metadata['file_size'],
+                metadata['file_name'],
+                metadata['modified_time']
+            )
             
             # For infographics and image-based content, just return the extracted text
             if 'infographic' in file_path.name.lower() or file_path.suffix.lower() in ['.png', '.jpg', '.jpeg']:
                 result = {
+                    '_stash': {
+                        'identifier': identifier,
+                        'state': 1
+                    },
                     'metadata': metadata,
                     'extracted_text': text,
                     'content_type': 'infographic'
@@ -511,6 +515,10 @@ class DocumentProcessor:
             else:
                 # For regular documents, perform NLP analysis
                 result = {
+                    '_stash': {
+                        'identifier': identifier,
+                        'state': 1
+                    },
                     'metadata': metadata,
                     'summary': self.extract_summary(text),
                     'description': self.extract_description(text),
