@@ -200,13 +200,17 @@ class DocumentProcessor:
             return ""
 
     def generate_identifier(self, file_size: int, file_name: str, modified_time: str) -> str:
-        """Generate a unique identifier using SHA256 and base64 encoding."""
-        # Combine the fields with a separator
-        combined = f"{file_size}|{file_name}|{modified_time}"
-        # Create SHA256 hash
-        sha256_hash = hashlib.sha256(combined.encode('utf-8')).digest()
-        # Convert to base64 and remove padding
-        return base64.b64encode(sha256_hash).decode('utf-8').rstrip('=')
+        """Generate a unique identifier for the file using SHA256 and base32 encoding."""
+        # Create a string combining file properties
+        identifier_data = f"{file_size}:{file_name}:{modified_time}"
+        
+        # Generate SHA256 hash
+        sha256_hash = hashlib.sha256(identifier_data.encode()).digest()
+        
+        # Convert to base32 (uppercase, no padding)
+        base32_encoded = base64.b32encode(sha256_hash).decode().rstrip('=')
+        
+        return base32_encoded
 
     def get_file_metadata(self, file_path: Path) -> Dict[str, Any]:
         """Get metadata for a file."""
@@ -227,7 +231,8 @@ class DocumentProcessor:
                 'file_size': file_size,
                 'created_time': datetime.fromtimestamp(stat.st_ctime).isoformat(),
                 'modified_time': modified_time,
-                'file_type': self.mime.from_file(str(file_path))
+                'file_type': self.mime.from_file(str(file_path)),
+                'extension': file_path.suffix.lower().lstrip('.')  # Remove the dot and convert to lowercase
             }
         except Exception as e:
             logging.error(f"Error getting metadata for {file_path}: {str(e)}")
@@ -235,7 +240,8 @@ class DocumentProcessor:
             return {
                 'file_name': file_path.name,
                 'file_path': str(file_path.relative_to(self.input_dir)).replace('\\', '/'),
-                'file_type': self.mime.from_file(str(file_path))
+                'file_type': self.mime.from_file(str(file_path)),
+                'extension': file_path.suffix.lower().lstrip('.')  # Remove the dot and convert to lowercase
             }
 
     def extract_summary(self, text: str) -> str:
@@ -506,7 +512,9 @@ class DocumentProcessor:
                 result = {
                     '_stash': {
                         'identifier': identifier,
-                        'state': 1
+                        'state': 1,
+                        'stage1_filename': f"{identifier}.{metadata['extension']}",
+                        'stage1_dataname': f"{identifier}.json"
                     },
                     'metadata': metadata,
                     'extracted_text': text,
@@ -517,7 +525,9 @@ class DocumentProcessor:
                 result = {
                     '_stash': {
                         'identifier': identifier,
-                        'state': 1
+                        'state': 1,
+                        'stage1_filename': f"{identifier}.{metadata['extension']}",
+                        'stage1_dataname': f"{identifier}.json"
                     },
                     'metadata': metadata,
                     'summary': self.extract_summary(text),
