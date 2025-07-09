@@ -11,8 +11,8 @@ sleep 1
 MINIO_CONNECT=0
 for i in {1..10}; do
     mc alias set myminio http://127.0.0.1:9000 "$MINIO_ROOT_USER" "$MINIO_ROOT_PASSWORD" && MINIO_CONNECT=1 && break
-    echo "Attempt $i failed, retrying in 1 second..."
-    sleep 1
+    echo "Attempt $i failed, retrying in 1 second... Z"
+    sleep 180
 done
 
 if [ "$MINIO_CONNECT" -eq 1 ]; then

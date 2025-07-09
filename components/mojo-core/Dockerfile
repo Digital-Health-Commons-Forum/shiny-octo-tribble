@@ -10,7 +10,7 @@ COPY Mojo-Core-* /install/
 WORKDIR /install
 
 # Install the application (latest version)
-RUN cpanm $(ls Mojo-Core-*.tar.gz | sort -V | tail -n 1)
+RUN cpanm $(ls Mojo-Core-*.tar.gz | sort -V | tail -n 1) || cat /root/.cpanm/work/*/build.log
 
 # Switch to the worker user
 USER worker
