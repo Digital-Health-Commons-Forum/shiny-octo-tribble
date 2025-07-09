@@ -2,6 +2,8 @@ Revision history for Perl extension [Mojo::Core]
 
 {{$NEXT}}
 
+0.027     2025-07-09 19:26:08 BST
+
 0.026     2025-01-07 21:37:58 GMT
     * Changed the version in main.pl to the same style as the module versions
     to see if it will still get version bumped
